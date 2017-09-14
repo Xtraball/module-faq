@@ -1,0 +1,44 @@
+{
+    "name": "Faq",
+    "code": "faq",
+    "version": "0.0.1",
+    "category": "social",
+    "model": "Faq_Model_Faq",
+    "desktop_uri": "faq/application/",
+    "routes": [
+        {
+            "root": true,
+            "state": "faq-list",
+            "controller": "FaqListController",
+            "url": "faq/mobile_list/index/value_id/:value_id",
+            "template": "list.html",
+            "layouts": {
+                "1": "l1",
+                "2": "l2"
+            },
+            "cache": false
+        },
+        {
+            "state": "faq-view",
+            "controller": "FaqViewController",
+            "url": "faq/mobile_view/index/value_id/:value_id",
+            "template": "l2/view.html",
+            "cache": false
+        }
+    ],
+    "layouts": [
+        1,
+        2
+    ],
+    "icons": [
+        "icons/faqicon-flat.png"
+    ],
+    "files": [
+        "js/controllers/faq.js",
+        "js/factory/faq.js",
+        "css/styles.css"
+    ],
+    "compile": true,
+    "use_account": false,
+    "only_once": false
+}

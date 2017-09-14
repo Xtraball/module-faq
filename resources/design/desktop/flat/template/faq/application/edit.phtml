@@ -1,0 +1,142 @@
+<?php
+$application = $this->getApplication();
+$appId = $application->getId();
+$optionValue = $this->getOptionValue();
+
+$formFaq = new Faq_Form_Faq();
+$formFaq->setValueId($optionValue->getId());
+
+$faqs = (new Faq_Model_Faq())->findAll([
+        'value_id' => $optionValue->getId()
+    ],
+    'faq_id DESC'
+);
+
+$deleteFaqForm = new Faq_Form_Faq_Delete();
+$deleteFaqForm->setValueId($optionValue->getId());
+?>
+
+<div id="list" class="faq">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#discount" aria-controls="discount" role="tab" data-toggle="tab">
+                <i class="fa fa-certificate"></i>
+                <?php echo __('FAQ') ?>
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#design" aria-controls="design" role="tab" data-toggle="tab">
+                <i class="fa fa-pencil"></i>
+                <?php echo __('Design') ?>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="discount">
+            <div class="feature-block-add">
+                <h3 class="title-editor no-border-radius title-feature-indent">
+                    <?php echo __('Create a new Question/Answer'); ?>
+                    <button type="button" class="feature-toggle-add toggle_design color-blue pull-right bt-header-right btn">
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                </h3>
+            </div>
+
+            <div class="feature-block-create">
+                <h3 class="title-editor no-border-radius title-feature-indent">
+                    <?php echo __('Create a new Question/Answer'); ?>
+                </h3>
+                <div class="container-fluid subcontent content-feature">
+                    <?php echo $formFaq; ?>
+                </div>
+            </div>
+
+            <?php echo $this->createPartialHtml('no_item', 'core_view_default', 'application/customization/features/edit/no_item.phtml'); ?>
+
+            <?php if(isset($faqs) && $faqs->count() > 0): ?>
+                <div class="feature-block-list">
+                    <div class="margin-top">
+                        <h3 class="title-editor no-border-radius title-feature-indent">
+                            <?php echo __('Manage content'); ?>
+                            <button type="button" class="toggle_design color-blue pull-right bt-header-right btn feature-toggle-items">
+                                <i class="fa fa-angle-down"></i>
+                            </button>
+                        </h3>
+                        <div class="container-fluid first-row-feature content-feature feature-manage-items">
+                            <table id="" class="table content-white-bkg sb-pager">
+                                <thead>
+                                <tr class="border-grey">
+                                    <th class="sortable" style="width:26%;"><?php echo __('Question'); ?></th>
+                                    <th class="sortable" style="width:70%;"><?php echo __('Answer'); ?></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach($faqs as $faq) : ?>
+                                    <tr id="faq_manage_element_<?php echo $faq->getId(); ?>" class="faq-manage-element sb-pager">
+                                        <td><?php echo cut($faq->getQuestion(), 22); ?></td>
+                                        <td><?php echo cut($faq->getAnswer(), 30); ?></td>
+                                        <td>
+                                            <i class="fa fa-search toggle-more" data-promotionid="<?php echo $faq->getId(); ?>"></i>
+                                        </td>
+                                        <td class="edit-action open-edit"
+                                            data-callback="$('table.sb-pager .block-details').hide();"
+                                            data-id="faq_<?php echo $faq->getId(); ?>"
+                                            data-form-url="<?php echo __path('/faq/application/loadform', [
+                                                'faq_id' => $faq->getId(),
+                                                'value_id' => $optionValue->getId()
+                                            ]); ?>">
+                                            <i class="fa fa-pencil"></i>
+                                        </td>
+                                        <td class="delete-action">
+                                            <?php
+                                            $deleteFaqForm->setAttrib('data-rowid', 'faq_manage_element_' . $faq->getId());
+                                            $deleteFaqForm->getElement('faq_id')->setValue($faq->getId());
+
+                                            echo $deleteFaqForm;
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr class="edit-form" data-id="faq_<?php echo $faq->getId(); ?>" style="display: none;">
+                                        <td colspan="5">
+                                            <p class="close-edit" data-id="faq_<?php echo $faq->getId(); ?>">
+                                                <i class="fa fa-times"></i><?php echo __('Close') ?>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <!-- START DESIGN TAB -->
+        <div role="tabpanel" class="tab-pane" id="design">
+            <?php echo $this->importLayout($optionValue, false); ?>
+
+            <?php echo $this->importBackground($optionValue, false); ?>
+        </div>
+        <!-- /END DESIGN TAB -->
+
+    </div>
+</div>
+
+<link href="/app/local/modules/Faq/resources/design/desktop/flat/template/faq/application/edit.css"
+      media="screen"
+      rel="stylesheet"
+      type="text/css">
+<script type="text/javascript">
+    var search_placeholder = '<?php echo __js("Search ...", "'") ?>';
+</script>
+<script type="text/javascript"
+        src="/app/local/modules/Faq/resources/design/desktop/flat/template/faq/application/edit.js">
+</script>

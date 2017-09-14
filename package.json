@@ -1,0 +1,16 @@
+{
+  "name": "Faq",
+  "decription": "FAQ made simple!",
+  "version": "0.0.3",
+  "type": "module",
+  "dependencies": {
+    "system": {
+      "type": "SAE",
+      "version": "4.12.10"
+    }
+  },
+  "assets": {
+    "path": "resources/var/apps/modules/faq",
+    "folder": "faq"
+  }
+}
